@@ -58,6 +58,7 @@ window.nearInitPromise = initContract()
 const beforeContent = dropArea.innerHTML;
 
 async function uploadFile (file) {
+  submitButton.textContent = 'Uploading file...'
 
   const resp = await fetch('https://api.nft.storage/upload', {
     method: 'POST',
@@ -69,19 +70,6 @@ async function uploadFile (file) {
   fileData = await resp.json()
   submitButton.disabled = false
 }
-
-input.addEventListener("change",async  function(event) {
-  if (event.target.files && event.target.files[0]) {
-    const reader = new FileReader();
-      reader.onload = function (e) {
-        uploadFile(e.target.result)
-      }   
-      reader.readAsArrayBuffer(event.dataTransfer.files[0])
-    }
-    file = this.files[0];
-    dropArea.classList.add("active");
-    viewfile();
-});
 
 dropArea.addEventListener("dragover", (event) => {
     event.preventDefault();
@@ -100,13 +88,13 @@ dropArea.addEventListener("drop", async (event) => {
     if (event.dataTransfer.files && event.dataTransfer.files[0]) {
       submitButton.disabled = true
       const reader = new FileReader();
-        reader.onloadend = function (e) {
-          uploadFile(e.target.result)
+        reader.onloadend = async function (e) {
+          await uploadFile(e.target.result)
+          submitButton.textContent = 'MINT IT UP!'
         }
         reader.readAsArrayBuffer(event.dataTransfer.files[0])
       }
     file = event.dataTransfer.files[0];
-    // await uploadFile(f)
     viewfile();
 });
 
@@ -145,7 +133,6 @@ function viewfile() {
 
 submitButton.onclick = async (event) => {
   submitButton.disabled = true
-  console.log(nameInput.value, fileData)
   if(await window.walletConnection.isSignedIn() && nameInput.value && fileData){
     try {
       // make an update call to the smart contract
@@ -171,10 +158,8 @@ submitButton.onclick = async (event) => {
       nameInput.value= ""
     }
   
-  } else {
-    alert("name is empty")
-    submitButton.disabled = false
   }
+  submitButton.disabled = false
 }
 
 const fileToBlob = async (file) => new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type });
