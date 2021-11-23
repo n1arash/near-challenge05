@@ -10,7 +10,6 @@ const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweD
 const submitButton = document.querySelector("#submit")
 const dropArea = document.querySelector(".drag-image"),
 dragText = dropArea.querySelector("h6"),
-button = document.querySelector("#pick"),
 input = dropArea.querySelector("input"),
 nameInput = document.querySelector("input[name='name']");
 let file;
@@ -57,10 +56,6 @@ window.nearInitPromise = initContract()
 
 
 const beforeContent = dropArea.innerHTML;
-
-button.onclick = () => {
-  input.click()
-}
 
 async function uploadFile (file) {
 
