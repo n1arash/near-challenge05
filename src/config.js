@@ -1,4 +1,4 @@
-const CONTRACT_NAME = 'nft.barbaz.testnet'
+const CONTRACT_NAME = process.env.CONTRACT_NAME || 'nft.barbaz.testnet'
 
 function getConfig(env) {
   switch (env) {
