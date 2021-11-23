@@ -17635,7 +17635,7 @@ __exportStar(require("./browser-connect"), exports);
 require("error-polyfill");
 
 },{"./key_stores/browser-index":"../node_modules/near-api-js/lib/key_stores/browser-index.js","./common-index":"../node_modules/near-api-js/lib/common-index.js","./browser-connect":"../node_modules/near-api-js/lib/browser-connect.js","error-polyfill":"../node_modules/error-polyfill/index.js"}],"config.js":[function(require,module,exports) {
-var CONTRACT_NAME = 'nft.barbaz.testnet';
+var CONTRACT_NAME = "dev-1637607743167-77621860629789" || 'nft.barbaz.testnet';
 
 function getConfig(env) {
   switch (env) {
@@ -18649,7 +18649,6 @@ var API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDM3
 var submitButton = document.querySelector("#submit");
 var dropArea = document.querySelector(".drag-image"),
     dragText = dropArea.querySelector("h6"),
-    button = document.querySelector("#pick"),
     input = dropArea.querySelector("input"),
     nameInput = document.querySelector("input[name='name']");
 var file;
@@ -18685,10 +18684,6 @@ window.nearInitPromise = (0, _utils.initContract)().then(function () {
 }).catch(console.error);
 var beforeContent = dropArea.innerHTML;
 
-button.onclick = function () {
-  input.click();
-};
-
 function uploadFile(_x) {
   return _uploadFile.apply(this, arguments);
 }
@@ -18716,8 +18711,10 @@ function _uploadFile() {
 
           case 5:
             fileData = _context5.sent;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Uploading file...';
 
-          case 6:
+          case 8:
           case "end":
             return _context5.stop();
         }
@@ -18727,39 +18724,6 @@ function _uploadFile() {
   return _uploadFile.apply(this, arguments);
 }
 
-input.addEventListener("change", /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(event) {
-    var reader;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            if (event.target.files && event.target.files[0]) {
-              reader = new FileReader();
-
-              reader.onload = function (e) {
-                uploadFile(e.target.result);
-              };
-
-              reader.readAsArrayBuffer(event.dataTransfer.files[0]);
-            }
-
-            file = this.files[0];
-            dropArea.classList.add("active");
-            viewfile();
-
-          case 4:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function (_x2) {
-    return _ref.apply(this, arguments);
-  };
-}());
 dropArea.addEventListener("dragover", function (event) {
   event.preventDefault();
   dropArea.classList.add("active");
@@ -18770,7 +18734,7 @@ dropArea.addEventListener("dragleave", function () {
   dragText.textContent = "Drag & Drop to Upload File";
 });
 dropArea.addEventListener("drop", /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(event) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(event) {
     var reader;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
@@ -18779,17 +18743,38 @@ dropArea.addEventListener("drop", /*#__PURE__*/function () {
             event.preventDefault();
 
             if (event.dataTransfer.files && event.dataTransfer.files[0]) {
+              submitButton.disabled = true;
               reader = new FileReader();
 
-              reader.onloadend = function (e) {
-                uploadFile(e.target.result);
-              };
+              reader.onloadend = /*#__PURE__*/function () {
+                var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+                  return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _context.next = 2;
+                          return uploadFile(e.target.result);
+
+                        case 2:
+                          submitButton.textContent = 'MINT IT UP!';
+
+                        case 3:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+
+                return function (_x3) {
+                  return _ref2.apply(this, arguments);
+                };
+              }();
 
               reader.readAsArrayBuffer(event.dataTransfer.files[0]);
             }
 
-            file = event.dataTransfer.files[0]; // await uploadFile(f)
-
+            file = event.dataTransfer.files[0];
             viewfile();
 
           case 4:
@@ -18800,8 +18785,8 @@ dropArea.addEventListener("drop", /*#__PURE__*/function () {
     }, _callee2);
   }));
 
-  return function (_x3) {
-    return _ref2.apply(this, arguments);
+  return function (_x2) {
+    return _ref.apply(this, arguments);
   };
 }());
 
@@ -18847,38 +18832,37 @@ submitButton.onclick = /*#__PURE__*/function () {
         switch (_context3.prev = _context3.next) {
           case 0:
             submitButton.disabled = true;
-            console.log(nameInput.value, fileData);
-            _context3.next = 4;
+            _context3.next = 3;
             return window.walletConnection.isSignedIn();
 
-          case 4:
+          case 3:
             _context3.t1 = _context3.sent;
 
             if (!_context3.t1) {
-              _context3.next = 7;
+              _context3.next = 6;
               break;
             }
 
             _context3.t1 = nameInput.value;
 
-          case 7:
+          case 6:
             _context3.t0 = _context3.t1;
 
             if (!_context3.t0) {
-              _context3.next = 10;
+              _context3.next = 9;
               break;
             }
 
             _context3.t0 = fileData;
 
-          case 10:
+          case 9:
             if (!_context3.t0) {
-              _context3.next = 26;
+              _context3.next = 23;
               break;
             }
 
-            _context3.prev = 11;
-            _context3.next = 14;
+            _context3.prev = 10;
+            _context3.next = 13;
             return window.contract.nft_mint({
               token_id: (0, _uuid.v4)(),
               receiver_id: window.accountId,
@@ -18893,37 +18877,32 @@ submitButton.onclick = /*#__PURE__*/function () {
               }
             }, '100000000000000', '100000000000000000000000');
 
-          case 14:
-            _context3.next = 19;
+          case 13:
+            _context3.next = 18;
             break;
 
-          case 16:
-            _context3.prev = 16;
-            _context3.t2 = _context3["catch"](11);
+          case 15:
+            _context3.prev = 15;
+            _context3.t2 = _context3["catch"](10);
             throw _context3.t2;
 
-          case 19:
-            _context3.prev = 19;
+          case 18:
+            _context3.prev = 18;
             // re-enable the form, whether the call succeeded or failed
             clearForm();
             submitButton.disabled = false;
             nameInput.value = "";
-            return _context3.finish(19);
+            return _context3.finish(18);
 
-          case 24:
-            _context3.next = 28;
-            break;
-
-          case 26:
-            alert("name is empty");
+          case 23:
             submitButton.disabled = false;
 
-          case 28:
+          case 24:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[11, 16, 19, 24]]);
+    }, _callee3, null, [[10, 15, 18, 23]]);
   }));
 
   return function (_x4) {
@@ -18991,7 +18970,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57600" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51283" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
